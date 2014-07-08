@@ -4,9 +4,22 @@ card_values = { "Two"=>2, "Three"=>3, "Four"=>4, "Five"=>5, "Six"=>6, "Seven"=>7
 
 all_lines = []
 input.scan(/^(.*)$/) { |x| all_lines.push(x[0]) }
+
 all_players = []
-for i in (1..(all_lines.length - 1))
-  all_players.push({ "name"=>"#{all_lines[i].scan(/^(.*):/)[0]}", "cards"=>all_lines[i].scan(/\s(.{3,5})\sof/) })
+all_lines.each { |x| x.scan(/^(.*):/) { |y| all_players.push(y[0]) } }
+
+all_cards = []
+all_lines.each { |x| all_cards.push(x.scan(/\s(.{3,5})\sof/)) }
+for i in ( 0.. ( all_cards.length - 1) )
+  for j in ( 0.. ( all_cards[i].length - 1) )
+    all_cards[i][j] = all_cards[i][j].join
+  end 
 end
 
-puts all_players
+associated_info = []
+for i in ( 0.. ( all_players.length - 1 ) )
+  associated_info.push( { "name" => all_players[i], "cards" => all_cards[i+1] } )
+end
+puts associated_info
+
+
