@@ -2,7 +2,7 @@ prime_numbers = [2,3]
 working_number = 3
 working_position = 0
 finished = false
-while prime_numbers.size < 10001
+while prime_numbers.size < 100
   working_number += 1
   working_position = 0
   finished = false
