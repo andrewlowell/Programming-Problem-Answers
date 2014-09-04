@@ -1,3 +1,6 @@
+# This code is admittedly not too d.r.y, much of the functionality could be pushed into functions and reused.
+# The function check_diagonal doesn't sanatize for inputs because I'm planning on putting only the right inputs in. That would need to change in any other context, I realize.
+
 maximum_product = 0
 grid = [
 	[8,2,22,97,38,15,0,40,0,75,4,5,7,78,52,12,50,77,91,8],
@@ -22,15 +25,82 @@ grid = [
 	[1,70,54,71,83,51,54,69,16,92,33,48,61,43,52,1,89,19,67,48]
 ]
 
+def check_products(array)
+  max_prod = 0
+	upper_limit = array.length - 4
+	for i in (0..upper_limit)
+		product = array[i] * array[i+1] * array[i+2] * array[i+3]
+		if product > max_prod
+			max_prod = product
+		end
+	end
+	return max_prod
+end
+
 # Horizontal
 for i in (0..19)
-	for j in (0..16)
-		product = grid[i][j] * grid[i][j+1] * grid[i][j+2] * grid[i][j+3]
-		if product > maximum_product
-			maximum_product = product
-		end
+	tmp = check_products(grid[i])
+	if tmp > maximum_product
+		maximum_product = tmp
 	end
 end
 
 # vertical
+shifted_grid = grid.transpose
+for i in (0..19)
+	tmp = check_products(shifted_grid[i])
+	if tmp > maximum_product
+		maximum_product = tmp
+	end
+end
+
+# Diagonal
+def check_diagonal(x,y,slope,grd)
+  local_mp = 0
+  array_of_multiples = []
+  working_x = x
+  working_y = y
+	if slope == "positive"
+	  while working_x >= 0 && working_y <= 19
+	  	array_of_multiples.push(grd[working_x][working_y])
+	  	working_x -= 1
+	  	working_y += 1
+	  end
+	elsif slope == "negative"
+	  while working_x >= 0 && working_y <= 19
+	  	array_of_multiples.push(grd[working_x][working_y])
+	  	working_x += 1
+	  	working_y += 1
+	  end	
+	end
+	tmp = check_products(array_of_multiples)
+	if tmp > local_mp
+		local_mp = tmp
+	end
+	return local_mp
+end
+
+for i in (3..19)
+	tmp = check_diagonal(i,0,"positive",grid)
+	if tmp > maximum_product
+		maximum_product = tmp
+	end
+end
+
+for i in (1..16)
+	check_diagonal(19,i,"positive",grid)
+end
+
+for i in (16..0)
+	check_diagonal(i,0,"negative",grid)
+end
+
+for i in (1..16)
+	check_diagonal(0,i,"negative",grid)
+end
+
+# Final output
+
+puts "Largest product: #{maximum_product}."
+
 
