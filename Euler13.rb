@@ -1,12 +1,12 @@
 sum = 0
 
 for i in (0..99)
-	sum += numbers[i][49]
+  sum += numbers[i][49]
 end
 
 new_row = []
-finished = false
-working_divisor = 10
+for i in (0..-1)
+.unshift(sum.)
 
 
 
